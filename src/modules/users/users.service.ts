@@ -38,6 +38,14 @@ export class UsersService {
     return userWithoutPassword;
   }
 
+  // Agregar dentro de la clase UsersService:
+  findAll(): Omit<User, 'password'>[] {
+    return this.users.map((user) => {
+      const { password: _, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    });
+  }
+
   findByEmail(email: string): User | undefined {
     return this.users.find((u) => u.email === email);
   }
