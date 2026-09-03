@@ -8,12 +8,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
@@ -28,13 +23,11 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Obtener todos los productos (Público)' })
   findAll() {
     return this.productsService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obtener un producto por ID (Público)' })
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }
@@ -43,8 +36,6 @@ export class ProductsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Crear un producto (Solo ADMIN)' })
-  @ApiResponse({ status: 201, description: 'Producto creado exitosamente.' })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
@@ -53,7 +44,6 @@ export class ProductsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Actualizar un producto (Solo ADMIN)' })
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(id, updateProductDto);
   }
@@ -62,7 +52,6 @@ export class ProductsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Eliminar un producto (Solo ADMIN)' })
   remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
