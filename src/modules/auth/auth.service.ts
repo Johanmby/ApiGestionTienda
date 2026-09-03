@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
 
@@ -24,7 +24,7 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    const user = this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException(
         'Credenciales inválidas (email incorrecto)',
@@ -40,7 +40,6 @@ export class AuthService {
 
     const payload = { sub: user.id, email: user.email, roles: user.roles };
 
-    // Copiamos el objeto y eliminamos 'password' de forma limpia
     const userWithoutPassword = { ...user };
     delete (userWithoutPassword as Partial<User>).password;
 
